@@ -22,6 +22,7 @@ button.g{background:none}
 .r{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.r>*{flex:1 1 90px}
 label{display:block;font-size:.8rem;color:var(--mu);margin-bottom:2px}
 .mu{color:var(--mu);font-size:.88rem}
+.chip{display:inline-block;font-size:.72rem;padding:1px 8px;border-radius:10px;background:var(--tr);border:1px solid var(--wa);color:var(--tx);vertical-align:middle}
 .bar{height:10px;background:var(--tr);border-radius:6px;overflow:hidden;margin:8px 0}.bar i{display:block;height:100%;background:var(--ac)}.bar.o i{background:var(--ba)}
 .ban{background:var(--tr);color:var(--tx);border-radius:12px;padding:10px 12px;margin-bottom:12px}.ban button{margin-top:6px}
 .tw{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:.9rem}th,td{padding:6px 8px;border-bottom:1px solid var(--bd);text-align:left;white-space:nowrap}
@@ -118,7 +119,8 @@ function vHeute(){
  <div class="c"><h2>Einträge</h2>${es.length?es.map(e=>`<div class="e"><span>${esc(fi(e))}${e.note?'<br><span class="mu">'+esc(e.note)+'</span>':''}</span><span>${fg(G(e))} <button class="g" onclick="delE(${e.id})" aria-label="Löschen">✕</button></span></div>`).join(''):'<span class="mu">Noch nichts eingetragen.</span>'}</div>
  <div class="c"><h2>Tagebuch</h2><textarea rows="5" style="width:100%;box-sizing:border-box" placeholder="Wie war dein Tag?" oninput="setN('d',this.value)">${esc((S.notes[day]||{}).d)}</textarea>
  <div style="margin-top:8px"><label>Guter Punkt heute</label><input style="width:100%;box-sizing:border-box" value="${esc((S.notes[day]||{}).g)}" oninput="setN('g',this.value)"></div>
- <div style="margin-top:8px"><label>Schlechter Punkt heute</label><input style="width:100%;box-sizing:border-box" value="${esc((S.notes[day]||{}).b)}" oninput="setN('b',this.value)"></div></div>`;
+ <div style="margin-top:8px"><label>Schlechter Punkt heute</label><input style="width:100%;box-sizing:border-box" value="${esc((S.notes[day]||{}).b)}" oninput="setN('b',this.value)"></div>
+ <div style="margin-top:8px"><label>Früher an so einem Tag – Verhalten mit Alkohol</label><textarea rows="2" style="width:100%;box-sizing:border-box" placeholder="z. B. früher hätte ich dabei ein Bier getrunken" oninput="setN('f',this.value)">${esc((S.notes[day]||{}).f)}</textarea></div></div>`;
 }
 function pre(){const x=PRE[$('#pr').value];$('#dn').value=x[0]==='Eigenes'?'':x[0];$('#ml').value=x[1];$('#pc').value=x[2];upd()}
 function upd(){const m=$('#ml'),c=$('#pc'),k=$('#ct'),o=$('#ci');if(m&&c&&k&&o)o.textContent='= '+fg((+m.value||0)*(+k.value||1)*(+c.value||0)/100*.8)+' reiner Alkohol'}
@@ -127,7 +129,7 @@ function addE(){
  (S.entries[day]=S.entries[day]||[]).push({id:Date.now(),n:$('#dn').value.trim()||'Getränk',ml,pc:+$('#pc').value||0,c,note:$('#nt').value.trim()});
  save();render();toast('Eingetragen')}
 function delE(id){S.entries[day]=aItems(day).filter(e=>e.id!==id);if(!S.entries[day].length)delete S.entries[day];save();render()}
-function setN(k,v){const n=S.notes[day]=S.notes[day]||{};n[k]=v;if(!n.d&&!n.g&&!n.b)delete S.notes[day];save()}
+function setN(k,v){const n=S.notes[day]=S.notes[day]||{};n[k]=v;if(!n.d&&!n.g&&!n.b&&!n.f)delete S.notes[day];save()}
 
 function gp(ym){const p=S.plans[ym]=S.plans[ym]||{days:{},tpl:[[],[],[],[],[],[],[]],maxWeek:null};p.occ=p.occ||{};p.maxItems=p.maxItems||[];return p}
 function edList(){const p=gp(ed.k==='d'?ed.s.slice(0,7):pm);return ed.k==='m'?p.maxItems:ed.k==='t'?p.tpl[ed.i]:(p.days[ed.s]=p.days[ed.s]||[])}
@@ -200,15 +202,15 @@ function vUebA(){
  <div class="c"><h2>Letzte 12 Monate (g)</h2>${chart(mi,1)}<div class="mu">Balken: getrunken (rot = über Plan bzw. Limit) · orange Strich: geplant · gestrichelt: Monatslimit. Tipp auf einen Monat wählt ihn aus.</div></div>
  <div class="c"><h2>Insgesamt</h2><p style="margin:0">${all.length} Tage mit Getränken · <b>${fg(allG)}</b> reiner Alkohol</p>${allA?`<p class="mu" style="margin-bottom:0">${esc(allA)}</p>`:''}</div>`;
 }
-let tAll=false;
-const tbHas=s=>{const n=S.notes[s]||{};return !!(occ(s)||n.d||n.g||n.b)};
+let tAll=false,tF=false;
+const tbHas=s=>{const n=S.notes[s]||{};return !!(occ(s)||n.d||n.g||n.b||n.f)};
 function vTb(){
- const ds=mDays(pm),sh=tAll?ds:ds.filter(tbHas);
+ const ds=mDays(pm),sh=tF?ds.filter(s=>(S.notes[s]||{}).f):tAll?ds:ds.filter(tbHas);
  return `<div class="c"><h2>Tagebuch</h2><input type="month" value="${pm}" onchange="if(this.value){pm=this.value;render()}">
- <div class="r" style="margin-top:8px"><span class="mu">${ds.filter(tbHas).length} Tage mit Eintrag in ${mname(pm)}</span><button class="g" onclick="tAll=!tAll;render()">${tAll?'Nur Tage mit Eintrag':'Alle Tage zeigen'}</button></div></div>
- ${sh.length?sh.map(s=>{const n=S.notes[s]||{};return `<div class="c" style="cursor:pointer" onclick="day='${s}';go('heute')"><b>${dl(s)}</b>${occ(s)?' · '+esc(occ(s)):''}
+ <div class="r" style="margin-top:8px"><span class="mu">${ds.filter(tbHas).length} Tage mit Eintrag in ${mname(pm)} · ${ds.filter(s=>(S.notes[s]||{}).f).length} markiert</span><button class="g" onclick="tAll=!tAll;render()">${tAll?'Nur Tage mit Eintrag':'Alle Tage zeigen'}</button><button class="${tF?'p':'g'}" onclick="tF=!tF;render()">Nur markierte</button></div></div>
+ ${sh.length?sh.map(s=>{const n=S.notes[s]||{};return `<div class="c" style="cursor:pointer${n.f?';border-left:4px solid var(--wa)':''}" onclick="day='${s}';go('heute')"><b>${dl(s)}</b>${n.f?' <span class="chip">Früher mit Alkohol</span>':''}${occ(s)?' · '+esc(occ(s)):''}
  ${has(s)?`<div class="mu">Getrunken: ${esc(fl2(aItems(s)))}</div>`:''}
- <div style="margin-top:6px"><span class="mu">Gut:</span> ${n.g?esc(n.g):'–'}</div><div><span class="mu">Schlecht:</span> ${n.b?esc(n.b):'–'}</div>
+ <div style="margin-top:6px"><span class="mu">Gut:</span> ${n.g?esc(n.g):'–'}</div><div><span class="mu">Schlecht:</span> ${n.b?esc(n.b):'–'}</div>${n.f?`<div style="margin-top:6px"><span class="mu">Früher:</span> ${esc(n.f)}</div>`:''}
  ${n.d?`<div class="mu" style="white-space:pre-wrap;margin-top:6px">${esc(n.d)}</div>`:''}</div>`}).join(''):'<div class="c mu">Noch keine Tagebuch-Einträge in diesem Monat.</div>'}`;
 }
 function mkDiaryPdf(){
@@ -216,13 +218,13 @@ function mkDiaryPdf(){
  const ds=mDays(pm).filter(tbHas);
  if(!ds.length){toast('Keine Tagebuch-Einträge in diesem Monat');return}
  const d=new window.jspdf.jsPDF({unit:'mm',format:'a4'}),L=14,W=182;let y=18;
- d.setFont('helvetica','bold');d.setFontSize(16);d.text('Tagebuch',L,y);y+=7;d.setFontSize(12);d.text(mname(pm),L,y);y+=10;
+ d.setFont('helvetica','bold');d.setFontSize(16);d.text('Tagebuch',L,y);y+=7;d.setFontSize(12);d.text(mname(pm),L,y);y+=5;d.setFont('helvetica','normal');d.setFontSize(8);d.setTextColor(110);d.text('* = Eintrag mit früherem Verhalten mit Alkohol',L,y);d.setTextColor(0);y+=7;
  const ln=(t,b,sz)=>{d.setFont('helvetica',b?'bold':'normal');d.setFontSize(sz||10);d.splitTextToSize(t,W).forEach(x=>{if(y>282){d.addPage();y=18}d.text(x,L,y);y+=4.8})};
  ds.forEach(s=>{const n=S.notes[s]||{};
   if(y>255){d.addPage();y=18}
-  ln(dl(s)+(occ(s)?' – '+occ(s):''),true,11);
+  ln(dl(s)+(n.f?' *':'')+(occ(s)?' – '+occ(s):''),true,11);
   if(has(s))ln('Getrunken: '+fl2(aItems(s)),false,9);
-  if(n.g)ln('Gut: '+n.g);if(n.b)ln('Schlecht: '+n.b);if(n.d)ln(n.d);
+  if(n.g)ln('Gut: '+n.g);if(n.b)ln('Schlecht: '+n.b);if(n.f)ln('Früher mit Alkohol: '+n.f);if(n.d)ln(n.d);
   y+=2;d.setDrawColor(220);d.line(L,y,L+W,y);y+=6});
  saveFile('tagebuch-'+pm+'.pdf',d.output('blob'));
 }
@@ -269,7 +271,7 @@ function mkPdf(k){
  y+=4;hd();d.setFontSize(9);
  isos.forEach(s=>{
   const es=aItems(s),nn=S.notes[s]||{},pi=pItems(s);
-  const gt=[...es.map(e=>`${fi(e)} (${fg(G(e))})`+(e.note?' – '+e.note:'')),nn.d&&'Tagebuch: '+nn.d,nn.g&&'Gut: '+nn.g,nn.b&&'Schlecht: '+nn.b].filter(Boolean).join('\n');
+  const gt=[...es.map(e=>`${fi(e)} (${fg(G(e))})`+(e.note?' – '+e.note:'')),nn.d&&'Tagebuch: '+nn.d,nn.f&&'Früher mit Alkohol: '+nn.f,nn.g&&'Gut: '+nn.g,nn.b&&'Schlecht: '+nn.b].filter(Boolean).join('\n');
   const l1=d.splitTextToSize((occ(s)?'Anlass: '+occ(s)+'\n':'')+(pi?(pi.length?pl(pi)+' ('+fg(sumG(pi))+')':'0'):'-'),48),l2=gt?d.splitTextToSize(gt,100):[''];
   const h=Math.max(has(s)?10:6,Math.max(l1.length,l2.length)*4.2+2);
   if(y+h>285){d.addPage();y=18;hd();d.setFontSize(9)}
