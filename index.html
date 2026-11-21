@@ -2,41 +2,48 @@
 <html lang="de"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Trink-Tagebuch</title>
-<meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Tagebuch"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon-192.png"><meta name="theme-color" content="#f5f1ea">
+<meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Tagebuch"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon-192.png"><meta name="color-scheme" content="light"><meta name="theme-color" content="#ebe5d9">
 <style>
-:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#f5f1ea;--cd:#fffdf9;--tx:#2b2d38;--mu:#7d7b87;--ac:#4f6288;--on:#fff;--bd:#e6e0d6;--wa:#d29a3c;--ba:#b9553f;--tr:#ebe6dc;color-scheme:light}
-@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#16181d;--cd:#1f2229;--tx:#e9eaf0;--mu:#9a9cab;--ac:#a3b8e0;--on:#14171d;--bd:#323644;--wa:#e2b360;--ba:#e58d79;--tr:#2a2e38;color-scheme:dark}}
-:root[data-theme=dark]{--bg:#16181d;--cd:#1f2229;--tx:#e9eaf0;--mu:#9a9cab;--ac:#a3b8e0;--on:#14171d;--bd:#323644;--wa:#e2b360;--ba:#e58d79;--tr:#2a2e38;color-scheme:dark}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#ebe5d9;--cd:#f8f4ec;--tx:#2b2d38;--mu:#706e7a;--ac:#43557b;--on:#fff;--bd:#d8d0c2;--wa:#c98d2e;--ba:#b04e39;--tr:#e0d9cb;color-scheme:light}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-main{max-width:760px;margin:0 auto;padding:14px}
-h1{font-size:1.35rem;margin:6px 0 10px}h2{font-size:1.05rem;margin:0 0 8px}
-nav{display:flex;gap:4px;overflow-x:auto;margin-bottom:14px;background:var(--tr);padding:4px;border-radius:14px}
-nav button{flex:1;white-space:nowrap;border-color:transparent;background:none}
+main{max-width:760px;margin:0 auto;padding:14px 14px 96px}
+h1{font-size:1.35rem;margin:6px 0 10px}h2{font-size:.95rem;font-weight:600;margin:0 0 10px}
+nav{position:fixed;left:0;right:0;bottom:0;z-index:5;display:flex;gap:2px;padding:6px 8px calc(6px + env(safe-area-inset-bottom,0px));background:var(--cd);border-top:1px solid var(--bd)}
+nav button{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;white-space:nowrap;border-color:transparent;background:none;padding:6px 2px;font-size:.72rem;color:var(--mu)}
+input,select,textarea{width:100%;box-sizing:border-box}
+button{min-height:44px}.e button,.chip{min-height:0}.e button{padding:4px 10px}
+button:active{transform:scale(.98)}body{-webkit-tap-highlight-color:transparent}
 button,input,select,textarea{font:inherit;color:var(--tx);background:var(--cd);border:1px solid var(--bd);border-radius:10px;padding:8px 10px;min-width:0}
 button{cursor:pointer;transition:background .15s}button.p{background:var(--ac);color:var(--on);border-color:var(--ac)}
-nav button.on{background:var(--cd);color:var(--tx);font-weight:600;box-shadow:0 1px 3px rgba(40,40,60,.15)}
+nav button.on{background:var(--tr);color:var(--ac);font-weight:600}
+.tiles{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:12px 0}.tiles div{background:var(--bg);border-radius:12px;padding:10px 12px}.tiles b{display:block;font-size:1.3rem}.tiles span{font-size:.8rem;color:var(--mu)}
+summary{cursor:pointer;font-weight:600;font-size:.95rem;list-style:none}summary::-webkit-details-marker{display:none}summary::after{content:'▾';float:right;color:var(--mu)}details[open]>summary::after{content:'▴'}details[open]>summary{margin-bottom:12px}
 input:focus,select:focus,textarea:focus,button:focus-visible{outline:2px solid var(--ac);outline-offset:1px}
 button.g{background:none}
 .c{background:var(--cd);border:1px solid var(--bd);border-radius:16px;padding:16px;margin-bottom:12px;box-shadow:0 1px 2px rgba(40,40,60,.05)}
 .r{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.r>*{flex:1 1 90px}
 label{display:block;font-size:.8rem;color:var(--mu);margin-bottom:2px}
 .mu{color:var(--mu);font-size:.88rem}
+.row{display:flex;align-items:center;gap:10px;padding:12px 6px;border-bottom:1px solid var(--bd);cursor:pointer;min-height:44px}.row:last-child{border-bottom:0}.row.on{background:var(--tr);border-radius:10px}
+.dt{font-weight:600;min-width:86px}.pv{flex:1;color:var(--mu);font-size:.9rem}.pv.has{color:var(--tx)}.ch{color:var(--mu);font-size:1.4rem;line-height:1}
+.stack{display:grid;gap:8px;margin-top:10px}.stack button{padding:12px}.ban button{background:var(--ac);color:var(--on);border-color:var(--ac)}
+.btn{font-size:1rem;color:var(--tx);display:block;text-align:center;padding:12px;border:1px solid var(--bd);border-radius:10px;background:var(--cd);cursor:pointer}
+.lb{display:inline-block;font-size:.72rem;font-weight:600;padding:1px 8px;border-radius:8px;margin-right:6px;vertical-align:1px}.gu{background:#e3ebf6;color:#34507f}.sc{background:#f4e4df;color:#8e3f2e}.fr{background:#f7ebd2;color:#7a5614}
 .chip{display:inline-block;font-size:.72rem;padding:1px 8px;border-radius:10px;background:var(--tr);border:1px solid var(--wa);color:var(--tx);vertical-align:middle}
 .bar{height:10px;background:var(--tr);border-radius:6px;overflow:hidden;margin:8px 0}.bar i{display:block;height:100%;background:var(--ac)}.bar.o i{background:var(--ba)}
-.ban{background:var(--tr);color:var(--tx);border-radius:12px;padding:10px 12px;margin-bottom:12px}.ban button{margin-top:6px}
+.ban{border-left:4px solid var(--wa);font-size:.92rem;background:var(--tr);color:var(--tx);border-radius:12px;padding:10px 12px;margin-bottom:12px}.ban button{margin-top:6px}
 .tw{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:.9rem}th,td{padding:6px 8px;border-bottom:1px solid var(--bd);text-align:left;white-space:nowrap}
 .ok{color:var(--mu)}.ov{color:var(--ba);font-weight:600}
 .e{display:flex;justify-content:space-between;gap:8px;padding:6px 0;border-bottom:1px solid var(--bd)}
 .g7{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}.g7 input{width:100%;box-sizing:border-box;padding:6px 4px;text-align:center}
 .dg{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:6px}
 .dg div{font-size:.75rem;color:var(--mu)}.dg input{width:100%;box-sizing:border-box;padding:6px}
-#t{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--tx);color:var(--bg);padding:8px 14px;border-radius:20px;display:none;z-index:9}
+#t{position:fixed;left:50%;bottom:calc(80px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--tx);color:var(--bg);padding:8px 14px;border-radius:20px;display:none;z-index:9}
 </style></head><body><main>
 <div id="ban"></div>
 <nav id="nav"></nav>
 <div id="v"></div>
-<p class="mu">Die Daten liegen nur in diesem Browser – sichere sie regelmäßig als JSON-Datei (Reiter „Export“).</p>
 </main><div id="t"></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
@@ -90,8 +97,9 @@ const preOpts=PRE.map((x,i)=>`<option value="${i}">${x[0]}${i<7?' '+x[1]+' ml':'
 const toast=m=>{const t=$('#t');t.textContent=m;t.style.display='block';clearTimeout(toast.h);toast.h=setTimeout(()=>t.style.display='none',2600)};
 const go=(t,m)=>{tab=t;if(m)pm=m;render();scrollTo(0,0)};
 
+const IC={heute:`<path d="M4 20h4L19 9l-4-4L4 16z"/>`,plan:`<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/>`,ue:`<path d="M5 20V11M12 20V5M19 20v-7"/>`,export:`<path d="M12 4v11M7 11l5 5 5-5M5 20h14"/>`};
 function render(){
- $('#nav').innerHTML=[['heute','Heute'],['plan','Plan'],['ue','Übersicht'],['export','Export']].map(([k,l])=>`<button class="${tab===k?'on':''}" onclick="go('${k}')">${l}</button>`).join('');
+ $('#nav').innerHTML=[['heute','Heute'],['plan','Plan'],['ue','Übersicht'],['export','Export']].map(([k,l])=>`<button class="${tab===k?'on':''}" onclick="go('${k}')"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${IC[k]}</svg>${l}</button>`).join('');
  $('#ban').innerHTML=plan(thisM)?'':`<div class="ban">Für ${mname(thisM)} gibt es noch keinen Plan. Lege jetzt fest, was du in welcher Menge und wann trinken möchtest.<br><button onclick="go('plan','${thisM}')">Monatsplan erstellen</button></div>`;
  $('#v').innerHTML={heute:vHeute,plan:vPlan,ue:vUeb,export:vExport}[tab]();
  if(tab==='heute')upd();
@@ -101,12 +109,12 @@ function vHeute(){
  const a=act(day),p=planned(day),pi=pItems(day),es=aItems(day);
  const pct=p==null?0:p>0?Math.min(100,a/p*100):(a>0?100:0),over=p!=null&&a>p+.5;
  const st=p==null?'Für diesen Tag ist nichts geplant.':over?`Über dem Plan (${fg(a-p)} Alkohol mehr)`:`Noch ${fg(Math.max(0,p-a))} Alkohol im Plan`;
- return `<div class="c"><div class="r"><button onclick="day=addD(day,-1);render()">‹</button><input type="date" value="${day}" onchange="if(this.value){day=this.value;render()}"><button onclick="day=addD(day,1);render()">›</button></div>
+ return `<div class="c"><div class="r"><button style="flex:0 0 46px" onclick="day=addD(day,-1);render()">‹</button><input type="date" value="${day}" onchange="if(this.value){day=this.value;render()}"><button style="flex:0 0 46px" onclick="day=addD(day,1);render()">›</button></div>
  <h2 style="margin-top:12px">${dl(day)}</h2>
- ${occ(day)?'<div>Anlass: <b>'+esc(occ(day))+'</b></div>':''}<div class="mu">Geplant: ${esc(pl(pi))}${p!=null?' · '+fg(p)+' Alkohol':''}</div>
- <div class="mu">Getrunken: ${es.length?esc(fl2(es))+' · '+fg(a)+' Alkohol':'–'}</div>
+ ${occ(day)?'<div>Anlass: <b>'+esc(occ(day))+'</b></div>':''}<div class="tiles"><div><b>${p!=null?fg(p):'–'}</b><span>geplant: ${esc(pl(pi))}</span></div><div><b class="${over?'ov':''}">${fg(a)}</b><span>getrunken: ${es.length?esc(fl2(es)):'–'}</span></div></div>
  <div class="bar ${over?'o':''}"><i style="width:${pct}%"></i></div><div class="${over?'ov':'ok'}">${st}</div></div>
- <div class="c"><h2>Getränk eintragen</h2><div class="r">
+ <div class="c"><h2>Einträge</h2>${es.length?es.map(e=>`<div class="e"><span>${esc(fi(e))}${e.note?'<br><span class="mu">'+esc(e.note)+'</span>':''}</span><span>${fg(G(e))} <button class="g" onclick="delE(${e.id})" aria-label="Löschen">✕</button></span></div>`).join(''):'<span class="mu">Noch nichts eingetragen.</span>'}</div>
+ <details class="c" ${fo?'open':''} ontoggle="fo=this.open"><summary>＋ Getränk eintragen</summary><div class="r">
  <div><label>Getränk (Vorlage)</label><select id="pr" onchange="pre()">${preOpts}</select></div>
  </div>
  <div style="margin-top:8px"><label>Name</label><input id="dn" value="Bier" style="width:100%;box-sizing:border-box"></div>
@@ -115,12 +123,11 @@ function vHeute(){
  <div><label>Anzahl</label><input id="ct" type="number" min="1" step="1" value="1" oninput="upd()"></div></div>
  <div class="mu" id="ci" style="margin-top:6px"></div>
  <div style="margin-top:8px"><label>Notiz (Anlass, Stimmung …)</label><input id="nt" style="width:100%;box-sizing:border-box"></div>
- <div class="r" style="margin-top:10px"><button class="p" onclick="addE()">Eintragen</button></div></div>
- <div class="c"><h2>Einträge</h2>${es.length?es.map(e=>`<div class="e"><span>${esc(fi(e))}${e.note?'<br><span class="mu">'+esc(e.note)+'</span>':''}</span><span>${fg(G(e))} <button class="g" onclick="delE(${e.id})" aria-label="Löschen">✕</button></span></div>`).join(''):'<span class="mu">Noch nichts eingetragen.</span>'}</div>
- <div class="c"><h2>Tagebuch</h2><textarea rows="5" style="width:100%;box-sizing:border-box" placeholder="Wie war dein Tag?" oninput="setN('d',this.value)">${esc((S.notes[day]||{}).d)}</textarea>
+ <div class="r" style="margin-top:10px"><button class="p" onclick="addE()">Eintragen</button></div></details>
+ <details class="c" ${fd?'open':''} ontoggle="fd=this.open"><summary>Tagebuch</summary><textarea rows="5" style="width:100%;box-sizing:border-box" placeholder="Wie war dein Tag?" oninput="setN('d',this.value)">${esc((S.notes[day]||{}).d)}</textarea>
  <div style="margin-top:8px"><label>Guter Punkt heute</label><input style="width:100%;box-sizing:border-box" value="${esc((S.notes[day]||{}).g)}" oninput="setN('g',this.value)"></div>
  <div style="margin-top:8px"><label>Schlechter Punkt heute</label><input style="width:100%;box-sizing:border-box" value="${esc((S.notes[day]||{}).b)}" oninput="setN('b',this.value)"></div>
- <div style="margin-top:8px"><label>Früher an so einem Tag – Verhalten mit Alkohol</label><textarea rows="2" style="width:100%;box-sizing:border-box" placeholder="z. B. früher hätte ich dabei ein Bier getrunken" oninput="setN('f',this.value)">${esc((S.notes[day]||{}).f)}</textarea></div></div>`;
+ <div style="margin-top:8px"><label>Früher an so einem Tag – Verhalten mit Alkohol</label><textarea rows="2" style="width:100%;box-sizing:border-box" placeholder="z. B. früher hätte ich dabei ein Bier getrunken" oninput="setN('f',this.value)">${esc((S.notes[day]||{}).f)}</textarea></div></details>`;
 }
 function pre(){const x=PRE[$('#pr').value];$('#dn').value=x[0]==='Eigenes'?'':x[0];$('#ml').value=x[1];$('#pc').value=x[2];upd()}
 function upd(){const m=$('#ml'),c=$('#pc'),k=$('#ct'),o=$('#ci');if(m&&c&&k&&o)o.textContent='= '+fg((+m.value||0)*(+k.value||1)*(+c.value||0)/100*.8)+' reiner Alkohol'}
@@ -138,10 +145,10 @@ function vPlan(){
  const sum=ds.reduce((a,s)=>a+(p.days[s]?sumG(p.days[s]):0),0);
  return `<div class="c"><h2>Monatsplan</h2><input type="month" value="${pm}" onchange="if(this.value){pm=this.value;ed=null;render()}">
  <p class="mu">Lege fest, welches Getränk du in welcher Menge an welchem Tag trinken möchtest.</p>
- <div style="margin-top:10px"><label>Monatslimit – was und wie viel</label><div class="e"><span class="mu">${p.maxItems&&p.maxItems.length?esc(pl(p.maxItems))+' · '+fg(sumG(p.maxItems)):'kein Getränke-Limit'}</span><button class="g" onclick="edM()">Bearbeiten</button></div></div></div>
+ <div class="row" onclick="edM()" style="border-top:1px solid var(--bd);margin-top:6px"><span class="dt">Monatslimit</span><span class="pv ${p.maxItems&&p.maxItems.length?'has':''}">${p.maxItems&&p.maxItems.length?esc(pl(p.maxItems))+' · '+fg(sumG(p.maxItems)):'kein Limit'}</span><span class="ch">›</span></div></div>
  ${ed?edCard():''}
  <div class="c"><h2>Tage</h2><div class="mu" style="margin-bottom:8px">Geplanter Alkohol im Monat: ${fg(sum)}</div>
- ${ds.map(s=>`<div class="e"><span>${dl(s)}${occ(s)?' · <b>'+esc(occ(s))+'</b>':''} <span class="mu">${esc(pl(p.days[s]||[]))}</span></span><button class="g" onclick="edD('${s}')">Bearbeiten</button></div>`).join('')}</div>`;
+ ${ds.map(s=>{const it=p.days[s]||[],oc=occ(s);return `<div class="row${s===today?' on':''}" onclick="edD('${s}')"><span class="dt">${dl(s)}</span><span class="pv ${it.length?'has':''}">${oc?'<b>'+esc(oc)+'</b> · ':''}${esc(pl(it))}</span><span class="ch">›</span></div>`}).join('')}</div>`;
 }
 function edCard(){
  const l=edList(),t=ed.k==='m'?'Monatslimit':dl(ed.s);
@@ -167,7 +174,7 @@ function status(s){
 function weeks(isos){const m={};isos.forEach(s=>{(m[wStart(s)]=m[wStart(s)]||[]).push(s)});return Object.entries(m)}
 
 function chart(items,step){
- const W=700,H=190,L0=36,pb=22,pt=10,n=items.length;
+ const W=360,H=180,L0=28,pb=22,pt=10,n=items.length;
  const mx=Math.max(10,...items.map(v=>Math.max(v.a,v.p||0,v.l||0)))*1.1,bw=(W-L0)/n,Y=v=>pt+(H-pt-pb)*(1-v/mx);
  let g='';
  [0,.5,1].forEach(f=>{const v=mx/1.1*f;g+=`<line x1="${L0}" x2="${W}" y1="${Y(v)}" y2="${Y(v)}" style="stroke:var(--bd)"/><text x="${L0-4}" y="${Y(v)+4}" text-anchor="end" style="fill:var(--mu);font-size:10px">${Math.round(v)}</text>`});
@@ -194,23 +201,23 @@ function vUebA(){
   return{lab:d.toLocaleDateString('de-DE',{month:'short'}),a,p,l:m||0,over:m!=null&&a>m+.5||(m==null&&p>0&&a>p+.5),title:mname(ym)+': '+fg(a)+(p?' (geplant '+fg(p)+')':'')+(m!=null?', Limit '+fg(m):''),click:`pm='${ym}';render()`}});
  const all=Object.keys(S.entries).filter(has),allG=all.reduce((x,s)=>x+act(s),0),allA=agg(all);
  return `<div class="c"><h2>Übersicht</h2><input type="month" value="${pm}" onchange="if(this.value){pm=this.value;render()}">
- <p>Alkohol getrunken <b>${fg(tot)}</b> · geplant <b>${fg(tp)}</b><br><span class="mu">Tage über Plan: <b class="${ov?'ov':''}">${ov}</b> · Tage ohne Alkohol: <b>${fr}</b></span></p>
+ <div class="tiles"><div><b>${fg(tot)}</b><span>getrunken</span></div><div><b>${fg(tp)}</b><span>geplant</span></div><div><b class="${ov?'ov':''}">${ov}</b><span>Tage über Plan</span></div><div><b>${fr}</b><span>Tage ohne Alkohol</span></div></div>
  ${lim!=null?`<div class="mu">Monatslimit: ${esc(maxTxt(pm))}</div><div class="bar ${lo?'o':''}"><i style="width:${pct}%"></i></div><div class="${lo?'ov':'ok'}">${lo?'Limit überschritten ('+fg(tot-lim)+' mehr)':'Noch '+fg(Math.max(0,lim-tot))+' bis zum Limit'}</div>`:'<div class="mu">Kein Monatslimit festgelegt.</div>'}
  ${ag?`<p class="mu" style="margin-bottom:0">Getränke: ${esc(ag)}</p>`:''}
  ${plan(pm)?'':'<p class="mu">Für diesen Monat gibt es noch keinen Plan.</p>'}</div>
- <div class="c"><h2>Alkohol pro Tag (g)</h2>${chart(di,ds.length>20?3:1)}<div class="mu">Balken: getrunken (rot = über Plan) · orange Strich: geplant. Tipp auf einen Tag öffnet ihn.</div></div>
+ <div class="c"><h2>Alkohol pro Tag (g)</h2>${chart(di,ds.length>20?5:1)}<div class="mu">Balken: getrunken (rot = über Plan) · orange Strich: geplant. Tipp auf einen Tag öffnet ihn.</div></div>
  <div class="c"><h2>Letzte 12 Monate (g)</h2>${chart(mi,1)}<div class="mu">Balken: getrunken (rot = über Plan bzw. Limit) · orange Strich: geplant · gestrichelt: Monatslimit. Tipp auf einen Monat wählt ihn aus.</div></div>
  <div class="c"><h2>Insgesamt</h2><p style="margin:0">${all.length} Tage mit Getränken · <b>${fg(allG)}</b> reiner Alkohol</p>${allA?`<p class="mu" style="margin-bottom:0">${esc(allA)}</p>`:''}</div>`;
 }
-let tAll=false,tF=false;
+let tAll=false,tF=false,fo=false,fd=true;
 const tbHas=s=>{const n=S.notes[s]||{};return !!(occ(s)||n.d||n.g||n.b||n.f)};
 function vTb(){
  const ds=mDays(pm),sh=tF?ds.filter(s=>(S.notes[s]||{}).f):tAll?ds:ds.filter(tbHas);
  return `<div class="c"><h2>Tagebuch</h2><input type="month" value="${pm}" onchange="if(this.value){pm=this.value;render()}">
- <div class="r" style="margin-top:8px"><span class="mu">${ds.filter(tbHas).length} Tage mit Eintrag in ${mname(pm)} · ${ds.filter(s=>(S.notes[s]||{}).f).length} markiert</span><button class="g" onclick="tAll=!tAll;render()">${tAll?'Nur Tage mit Eintrag':'Alle Tage zeigen'}</button><button class="${tF?'p':'g'}" onclick="tF=!tF;render()">Nur markierte</button></div></div>
+ <div class="mu" style="margin:10px 0 8px">${ds.filter(tbHas).length} Tage mit Eintrag · ${ds.filter(s=>(S.notes[s]||{}).f).length} markiert</div><div class="r"><button class="${tAll?'p':'g'}" onclick="tAll=!tAll;render()">Alle Tage</button><button class="${tF?'p':'g'}" onclick="tF=!tF;render()">Nur markierte</button></div></div>
  ${sh.length?sh.map(s=>{const n=S.notes[s]||{};return `<div class="c" style="cursor:pointer${n.f?';border-left:4px solid var(--wa)':''}" onclick="day='${s}';go('heute')"><b>${dl(s)}</b>${n.f?' <span class="chip">Früher mit Alkohol</span>':''}${occ(s)?' · '+esc(occ(s)):''}
  ${has(s)?`<div class="mu">Getrunken: ${esc(fl2(aItems(s)))}</div>`:''}
- <div style="margin-top:6px"><span class="mu">Gut:</span> ${n.g?esc(n.g):'–'}</div><div><span class="mu">Schlecht:</span> ${n.b?esc(n.b):'–'}</div>${n.f?`<div style="margin-top:6px"><span class="mu">Früher:</span> ${esc(n.f)}</div>`:''}
+ <div style="margin-top:6px"><span class="lb gu">Gut</span> ${n.g?esc(n.g):'–'}</div><div><span class="lb sc">Schlecht</span> ${n.b?esc(n.b):'–'}</div>${n.f?`<div style="margin-top:6px"><span class="lb fr">Früher</span> ${esc(n.f)}</div>`:''}
  ${n.d?`<div class="mu" style="white-space:pre-wrap;margin-top:6px">${esc(n.d)}</div>`:''}</div>`}).join(''):'<div class="c mu">Noch keine Tagebuch-Einträge in diesem Monat.</div>'}`;
 }
 function mkDiaryPdf(){
@@ -229,13 +236,14 @@ function mkDiaryPdf(){
  saveFile('tagebuch-'+pm+'.pdf',d.output('blob'));
 }
 function vExport(){
- return `<div class="c"><h2>PDF-Auswertung</h2>
- <div class="r"><div><label>Monat</label><input type="month" value="${pm}" onchange="if(this.value){pm=this.value;render()}"></div><button class="p" onclick="mkPdf('m')">Monats-PDF</button></div>
- <div class="r" style="margin-top:10px"><div><label>Woche (beliebiger Tag darin)</label><input type="date" value="${pw}" onchange="if(this.value)pw=this.value"></div><button class="p" onclick="mkPdf('w')">Wochen-PDF</button></div>
- <div class="r" style="margin-top:10px"><div class="mu">Nur das Tagebuch (Anlass, Gut, Schlecht, Text) für den oben gewählten Monat</div><button class="p" onclick="mkDiaryPdf()">Tagebuch-PDF</button></div></div>
- <div class="c"><h2>Backup (JSON)</h2>
- <div class="r"><button class="p" onclick="expJ()">Backup speichern</button><label class="g" style="margin:0"><input type="file" accept=".json,application/json" onchange="readF(this.files[0])" style="width:100%"></label></div>
- ${imp?`<div class="ban" style="background:var(--ac);color:var(--on)">Backup mit ${Object.keys(imp.entries).length} Tagen und ${Object.keys(imp.plans).length} Monatsplänen geladen.<br><div class="r" style="margin-top:6px"><button onclick="doImp(true)">Zusammenführen</button><button onclick="doImp(false)">Alles ersetzen</button><button onclick="imp=null;render()">Abbrechen</button></div></div>`:''}</div>`;
+ return `<div class="c"><h2>PDF</h2>
+ <label>Monat</label><input type="month" value="${pm}" onchange="if(this.value){pm=this.value;render()}">
+ <div class="stack"><button class="p" onclick="mkPdf('m')">Monats-PDF</button><button class="p" onclick="mkDiaryPdf()">Tagebuch-PDF</button></div>
+ <label style="margin-top:16px">Woche (beliebiger Tag darin)</label><input type="date" value="${pw}" onchange="if(this.value)pw=this.value">
+ <div class="stack"><button class="p" onclick="mkPdf('w')">Wochen-PDF</button></div></div>
+ <div class="c"><h2>Backup</h2><p class="mu" style="margin-top:0">Deine Daten liegen nur auf diesem Gerät – sichere sie regelmäßig.</p>
+ <div class="stack"><button class="p" onclick="expJ()">Backup speichern</button><label class="btn">Backup einspielen<input type="file" accept=".json,application/json" onchange="readF(this.files[0])" hidden></label></div>
+ ${imp?`<div class="c" style="border:2px solid var(--ac);margin:14px 0 0">Backup mit ${Object.keys(imp.entries).length} Tagen, ${Object.keys(imp.notes).length} Tagebuch-Tagen und ${Object.keys(imp.plans).length} Monatsplänen geladen.<div class="stack"><button onclick="doImp(true)">Zusammenführen</button><button onclick="doImp(false)">Alles ersetzen</button><button class="g" onclick="imp=null;render()">Abbrechen</button></div></div>`:''}</div>`;
 }
 async function saveFile(name,data){
  const type=name.endsWith('.pdf')?'application/pdf':'application/json';
