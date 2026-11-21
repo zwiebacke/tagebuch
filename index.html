@@ -2,21 +2,23 @@
 <html lang="de"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Trink-Tagebuch</title>
-<meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Tagebuch"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon-192.png"><meta name="theme-color" content="#f4f3f0">
+<meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Tagebuch"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon-192.png"><meta name="theme-color" content="#f5f1ea">
 <style>
-:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#f4f3f0;--cd:#fff;--tx:#232323;--mu:#7b7972;--ac:#2b2b2b;--on:#fff;--bd:#e2e0db;--wa:#8a6d3b;--ba:#a14a3b;--tr:#e9e7e2;color-scheme:light}
-@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#161616;--cd:#202020;--tx:#e9e7e3;--mu:#9a978f;--ac:#e9e7e3;--on:#161616;--bd:#343432;--wa:#c9a86a;--ba:#d98a7a;--tr:#2b2b29;color-scheme:dark}}
-:root[data-theme=dark]{--bg:#161616;--cd:#202020;--tx:#e9e7e3;--mu:#9a978f;--ac:#e9e7e3;--on:#161616;--bd:#343432;--wa:#c9a86a;--ba:#d98a7a;--tr:#2b2b29;color-scheme:dark}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#f5f1ea;--cd:#fffdf9;--tx:#2b2d38;--mu:#7d7b87;--ac:#4f6288;--on:#fff;--bd:#e6e0d6;--wa:#d29a3c;--ba:#b9553f;--tr:#ebe6dc;color-scheme:light}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#16181d;--cd:#1f2229;--tx:#e9eaf0;--mu:#9a9cab;--ac:#a3b8e0;--on:#14171d;--bd:#323644;--wa:#e2b360;--ba:#e58d79;--tr:#2a2e38;color-scheme:dark}}
+:root[data-theme=dark]{--bg:#16181d;--cd:#1f2229;--tx:#e9eaf0;--mu:#9a9cab;--ac:#a3b8e0;--on:#14171d;--bd:#323644;--wa:#e2b360;--ba:#e58d79;--tr:#2a2e38;color-scheme:dark}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
 main{max-width:760px;margin:0 auto;padding:14px}
 h1{font-size:1.35rem;margin:6px 0 10px}h2{font-size:1.05rem;margin:0 0 8px}
-nav{display:flex;gap:6px;overflow-x:auto;margin-bottom:12px}
-nav button{flex:1;white-space:nowrap}
+nav{display:flex;gap:4px;overflow-x:auto;margin-bottom:14px;background:var(--tr);padding:4px;border-radius:14px}
+nav button{flex:1;white-space:nowrap;border-color:transparent;background:none}
 button,input,select,textarea{font:inherit;color:var(--tx);background:var(--cd);border:1px solid var(--bd);border-radius:10px;padding:8px 10px;min-width:0}
-button{cursor:pointer}button.p,nav button.on{background:var(--ac);color:var(--on);border-color:var(--ac)}
+button{cursor:pointer;transition:background .15s}button.p{background:var(--ac);color:var(--on);border-color:var(--ac)}
+nav button.on{background:var(--cd);color:var(--tx);font-weight:600;box-shadow:0 1px 3px rgba(40,40,60,.15)}
+input:focus,select:focus,textarea:focus,button:focus-visible{outline:2px solid var(--ac);outline-offset:1px}
 button.g{background:none}
-.c{background:var(--cd);border:1px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:12px}
+.c{background:var(--cd);border:1px solid var(--bd);border-radius:16px;padding:16px;margin-bottom:12px;box-shadow:0 1px 2px rgba(40,40,60,.05)}
 .r{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.r>*{flex:1 1 90px}
 label{display:block;font-size:.8rem;color:var(--mu);margin-bottom:2px}
 .mu{color:var(--mu);font-size:.88rem}
@@ -76,8 +78,8 @@ const plan=ym=>S.plans[ym];
 const pItems=s=>{const p=plan(s.slice(0,7));return p?(p.days[s]||[]):null};
 const planned=s=>{const i=pItems(s);return i?sumG(i):null};
 const occ=s=>{const p=plan(s.slice(0,7));return p&&p.occ&&p.occ[s]||''};
-const maxW=s=>{const p=plan(s.slice(0,7));if(!p)return null;if(p.maxItems&&p.maxItems.length)return sumG(p.maxItems);return p.maxWeek!=null?p.maxWeek:null};
-const maxTxt=s=>{const p=plan(s.slice(0,7));if(!p)return '–';if(p.maxItems&&p.maxItems.length)return pl(p.maxItems)+' ('+fg(sumG(p.maxItems))+')';return p.maxWeek!=null?fg(p.maxWeek):'–'};
+const maxM=ym=>{const p=plan(ym);if(!p)return null;if(p.maxItems&&p.maxItems.length)return sumG(p.maxItems);return null};
+const maxTxt=ym=>{const p=plan(ym);if(!p)return '–';if(p.maxItems&&p.maxItems.length)return pl(p.maxItems)+' ('+fg(sumG(p.maxItems))+')';return '–'};
 const agg=isos=>{const m={};isos.forEach(s=>aItems(s).forEach(e=>{if(e.ml)m[e.n]=(m[e.n]||0)+e.ml*(e.c||1)}));return Object.entries(m).sort((a,b)=>b[1]-a[1]).map(([n,v])=>n+' '+fl(v)).join(', ')};
 const today=iso(new Date()),thisM=today.slice(0,7);
 const free=s=>s<=today&&!has(s);
@@ -88,9 +90,9 @@ const toast=m=>{const t=$('#t');t.textContent=m;t.style.display='block';clearTim
 const go=(t,m)=>{tab=t;if(m)pm=m;render();scrollTo(0,0)};
 
 function render(){
- $('#nav').innerHTML=[['heute','Heute'],['plan','Plan'],['monat','Monat'],['export','Export']].map(([k,l])=>`<button class="${tab===k?'on':''}" onclick="go('${k}')">${l}</button>`).join('');
+ $('#nav').innerHTML=[['heute','Heute'],['plan','Plan'],['ue','Übersicht'],['export','Export']].map(([k,l])=>`<button class="${tab===k?'on':''}" onclick="go('${k}')">${l}</button>`).join('');
  $('#ban').innerHTML=plan(thisM)?'':`<div class="ban">Für ${mname(thisM)} gibt es noch keinen Plan. Lege jetzt fest, was du in welcher Menge und wann trinken möchtest.<br><button onclick="go('plan','${thisM}')">Monatsplan erstellen</button></div>`;
- $('#v').innerHTML={heute:vHeute,plan:vPlan,monat:vMonat,export:vExport}[tab]();
+ $('#v').innerHTML={heute:vHeute,plan:vPlan,ue:vUeb,export:vExport}[tab]();
  if(tab==='heute')upd();
 }
 
@@ -134,14 +136,13 @@ function vPlan(){
  const sum=ds.reduce((a,s)=>a+(p.days[s]?sumG(p.days[s]):0),0);
  return `<div class="c"><h2>Monatsplan</h2><input type="month" value="${pm}" onchange="if(this.value){pm=this.value;ed=null;render()}">
  <p class="mu">Lege fest, welches Getränk du in welcher Menge an welchem Tag trinken möchtest.</p>
- <div style="margin-top:10px"><label>Wochenlimit – was und wie viel</label><div class="e"><span class="mu">${p.maxItems&&p.maxItems.length?esc(pl(p.maxItems))+' · '+fg(sumG(p.maxItems)):'kein Getränke-Limit'}</span><button class="g" onclick="edM()">Bearbeiten</button></div></div>
- <div class="r" style="margin-top:10px"><div><label>oder: Max. reiner Alkohol pro Woche in g</label><input type="number" min="0" step="1" value="${p.maxWeek==null?'':Math.round(p.maxWeek)}" onchange="gp(pm).maxWeek=this.value===''?null:+this.value;save()"></div></div></div>
+ <div style="margin-top:10px"><label>Monatslimit – was und wie viel</label><div class="e"><span class="mu">${p.maxItems&&p.maxItems.length?esc(pl(p.maxItems))+' · '+fg(sumG(p.maxItems)):'kein Getränke-Limit'}</span><button class="g" onclick="edM()">Bearbeiten</button></div></div></div>
  ${ed?edCard():''}
  <div class="c"><h2>Tage</h2><div class="mu" style="margin-bottom:8px">Geplanter Alkohol im Monat: ${fg(sum)}</div>
  ${ds.map(s=>`<div class="e"><span>${dl(s)}${occ(s)?' · <b>'+esc(occ(s))+'</b>':''} <span class="mu">${esc(pl(p.days[s]||[]))}</span></span><button class="g" onclick="edD('${s}')">Bearbeiten</button></div>`).join('')}</div>`;
 }
 function edCard(){
- const l=edList(),t=ed.k==='m'?'Wochenlimit':dl(ed.s);
+ const l=edList(),t=ed.k==='m'?'Monatslimit':dl(ed.s);
  return `<div class="c" id="edc"><h2>${t}</h2>${ed.k==='d'?`<label>Anlass</label><input value="${esc(occ(ed.s))}" oninput="setO('${ed.s}',this.value)" placeholder="z. B. Geburtstag" style="width:100%;box-sizing:border-box;margin-bottom:10px">`:''}${l.length?l.map((i,x)=>`<div class="e"><span>${esc(fi(i))}</span><span>${fg(G(i))} <button class="g" onclick="edDel(${x})" aria-label="Löschen">✕</button></span></div>`).join(''):'<span class="mu">'+(ed.k==='m'?'Kein Getränke-Limit.':'0 – nichts geplant.')+'</span>'}
  <div class="r" style="margin-top:10px"><div><label>Getränk (Vorlage)</label><select id="qs" onchange="qpre()">${preOpts}</select></div><div><label>Name</label><input id="qn" value="Bier"></div></div>
  <div class="r" style="margin-top:8px"><div><label>Menge pro Glas (ml)</label><input id="qm" type="number" min="0" value="330"></div><div><label>Vol.-%</label><input id="qp" type="number" min="0" step="0.1" value="5"></div><div><label>Anzahl</label><input id="qc" type="number" min="1" step="1" value="1"></div></div>
@@ -162,24 +163,49 @@ function status(s){
  return[s<=today?'0':'–',''];
 }
 function weeks(isos){const m={};isos.forEach(s=>{(m[wStart(s)]=m[wStart(s)]||[]).push(s)});return Object.entries(m)}
-function vMonat(){
- const ds=mDays(pm),tot=ds.reduce((a,s)=>a+act(s),0),tp=ds.reduce((a,s)=>a+(planned(s)||0),0),ag=agg(ds);
- const dryN=ds.filter(free).length,ov=ds.filter(s=>planned(s)!=null&&act(s)>planned(s)+.5).length;
- const W='style="white-space:normal;min-width:120px"';
- return `<div class="c"><h2>Übersicht</h2><input type="month" value="${pm}" onchange="if(this.value){pm=this.value;render()}">
- <p>Alkohol getrunken <b>${fg(tot)}</b> von geplant <b>${fg(tp)}</b> · alkoholfreie Tage: <b>${dryN}</b> · Tage über Plan: <b class="${ov?'ov':''}">${ov}</b></p>
- ${ag?`<p class="mu">Getränke gesamt: ${esc(ag)}</p>`:''}
- ${plan(pm)?'':'<p class="mu">Für diesen Monat gibt es noch keinen Plan.</p>'}</div>
- <div class="c"><h2>Wochen</h2><div class="tw"><table><tr><th>Woche ab</th><th>Geplant</th><th>Getrunken</th><th>Limit</th></tr>${weeks(ds).map(([w,l])=>{const a=l.reduce((x,s)=>x+act(s),0),p=l.reduce((x,s)=>x+(planned(s)||0),0),m=maxW(l[0]);return `<tr><td>${dl(w)}</td><td>${fg(p)}</td><td class="${m!=null&&a>m?'ov':''}">${fg(a)}</td><td ${W}>${esc(maxTxt(l[0]))}</td></tr>`}).join('')}</table></div></div>
- <div class="c"><h2>Tage</h2><div class="tw"><table><tr><th>Tag</th><th>Geplant</th><th>Getrunken</th><th>Status</th></tr>${ds.map(s=>{const st=status(s);return `<tr style="cursor:pointer" onclick="day='${s}';go('heute')"><td>${dl(s)}${S.notes[s]?' ✎':''}</td><td ${W}>${occ(s)?'<b>'+esc(occ(s))+'</b><br>':''}${esc(pl(pItems(s)))}</td><td ${W}>${esc(fl2(aItems(s)))}</td><td class="${st[1]}">${st[0]}</td></tr>`}).join('')}</table></div></div>`;
-}
 
+function chart(items,step){
+ const W=700,H=190,L0=36,pb=22,pt=10,n=items.length;
+ const mx=Math.max(10,...items.map(v=>Math.max(v.a,v.p||0,v.l||0)))*1.1,bw=(W-L0)/n,Y=v=>pt+(H-pt-pb)*(1-v/mx);
+ let g='';
+ [0,.5,1].forEach(f=>{const v=mx/1.1*f;g+=`<line x1="${L0}" x2="${W}" y1="${Y(v)}" y2="${Y(v)}" style="stroke:var(--bd)"/><text x="${L0-4}" y="${Y(v)+4}" text-anchor="end" style="fill:var(--mu);font-size:10px">${Math.round(v)}</text>`});
+ items.forEach((v,i)=>{const x=L0+i*bw;
+  g+=`<g onclick="${v.click}" style="cursor:pointer"><title>${esc(v.title)}</title><rect x="${x}" y="${pt}" width="${bw}" height="${H-pt-pb}" style="fill:transparent"/>`;
+  if(v.a>0)g+=`<rect x="${x+bw*.15}" y="${Y(v.a)}" width="${bw*.7}" height="${Y(0)-Y(v.a)}" rx="2" style="fill:${v.over?'var(--ba)':'var(--ac)'}"/>`;
+  if(v.p>0)g+=`<line x1="${x+bw*.05}" x2="${x+bw*.95}" y1="${Y(v.p)}" y2="${Y(v.p)}" style="stroke:var(--wa);stroke-width:2"/>`;
+  if(v.l>0)g+=`<line x1="${x+bw*.05}" x2="${x+bw*.95}" y1="${Y(v.l)}" y2="${Y(v.l)}" style="stroke:var(--tx);stroke-width:1.5;stroke-dasharray:3 2"/>`;
+  g+='</g>';
+  if(i%step===0)g+=`<text x="${x+bw/2}" y="${H-6}" text-anchor="middle" style="fill:var(--mu);font-size:10px">${esc(v.lab)}</text>`;
+ });
+ return `<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;display:block">${g}</svg>`;
+}
+let usub='a';
+function vUeb(){return `<div class="r" style="margin-bottom:12px"><button class="${usub==='a'?'p':''}" onclick="usub='a';render()">Auswertung</button><button class="${usub==='t'?'p':''}" onclick="usub='t';render()">Tagebuch</button></div>`+(usub==='t'?vTb():vUebA())}
+function vUebA(){
+ const ds=mDays(pm),tot=ds.reduce((a,s)=>a+act(s),0),tp=ds.reduce((a,s)=>a+(planned(s)||0),0),lim=maxM(pm),ag=agg(ds);
+ const ov=ds.filter(s=>planned(s)!=null&&act(s)>planned(s)+.5).length,fr=ds.filter(free).length;
+ const pct=lim>0?Math.min(100,tot/lim*100):(tot>0?100:0),lo=lim!=null&&tot>lim+.5;
+ const di=ds.map(s=>{const a=act(s),p=planned(s);return{lab:String(+s.slice(8)),a,p,over:p!=null&&a>p+.5,title:dl(s)+': '+fg(a)+(p!=null?' (geplant '+fg(p)+')':''),click:`day='${s}';go('heute')`}});
+ const[y0,m0]=pm.split('-').map(Number);
+ const mi=Array.from({length:12},(_,i)=>{const d=new Date(y0,m0-1-(11-i),1),ym=d.getFullYear()+'-'+p2(d.getMonth()+1),l=mDays(ym);
+  const a=l.reduce((x,s)=>x+act(s),0),p=l.reduce((x,s)=>x+(planned(s)||0),0),m=maxM(ym);
+  return{lab:d.toLocaleDateString('de-DE',{month:'short'}),a,p,l:m||0,over:m!=null&&a>m+.5||(m==null&&p>0&&a>p+.5),title:mname(ym)+': '+fg(a)+(p?' (geplant '+fg(p)+')':'')+(m!=null?', Limit '+fg(m):''),click:`pm='${ym}';render()`}});
+ const all=Object.keys(S.entries).filter(has),allG=all.reduce((x,s)=>x+act(s),0),allA=agg(all);
+ return `<div class="c"><h2>Übersicht</h2><input type="month" value="${pm}" onchange="if(this.value){pm=this.value;render()}">
+ <p>Alkohol getrunken <b>${fg(tot)}</b> · geplant <b>${fg(tp)}</b><br><span class="mu">Tage über Plan: <b class="${ov?'ov':''}">${ov}</b> · Tage ohne Alkohol: <b>${fr}</b></span></p>
+ ${lim!=null?`<div class="mu">Monatslimit: ${esc(maxTxt(pm))}</div><div class="bar ${lo?'o':''}"><i style="width:${pct}%"></i></div><div class="${lo?'ov':'ok'}">${lo?'Limit überschritten ('+fg(tot-lim)+' mehr)':'Noch '+fg(Math.max(0,lim-tot))+' bis zum Limit'}</div>`:'<div class="mu">Kein Monatslimit festgelegt.</div>'}
+ ${ag?`<p class="mu" style="margin-bottom:0">Getränke: ${esc(ag)}</p>`:''}
+ ${plan(pm)?'':'<p class="mu">Für diesen Monat gibt es noch keinen Plan.</p>'}</div>
+ <div class="c"><h2>Alkohol pro Tag (g)</h2>${chart(di,ds.length>20?3:1)}<div class="mu">Balken: getrunken (rot = über Plan) · orange Strich: geplant. Tipp auf einen Tag öffnet ihn.</div></div>
+ <div class="c"><h2>Letzte 12 Monate (g)</h2>${chart(mi,1)}<div class="mu">Balken: getrunken (rot = über Plan bzw. Limit) · orange Strich: geplant · gestrichelt: Monatslimit. Tipp auf einen Monat wählt ihn aus.</div></div>
+ <div class="c"><h2>Insgesamt</h2><p style="margin:0">${all.length} Tage mit Getränken · <b>${fg(allG)}</b> reiner Alkohol</p>${allA?`<p class="mu" style="margin-bottom:0">${esc(allA)}</p>`:''}</div>`;
+}
 let tAll=false;
 const tbHas=s=>{const n=S.notes[s]||{};return !!(occ(s)||n.d||n.g||n.b)};
 function vTb(){
  const ds=mDays(pm),sh=tAll?ds:ds.filter(tbHas);
- return `<div class="c"><h2>Tagebuch</h2>
- <div class="r"><span class="mu">${ds.filter(tbHas).length} Tage mit Eintrag in ${mname(pm)}</span><button class="g" onclick="tAll=!tAll;render()">${tAll?'Nur Tage mit Eintrag':'Alle Tage zeigen'}</button></div></div>
+ return `<div class="c"><h2>Tagebuch</h2><input type="month" value="${pm}" onchange="if(this.value){pm=this.value;render()}">
+ <div class="r" style="margin-top:8px"><span class="mu">${ds.filter(tbHas).length} Tage mit Eintrag in ${mname(pm)}</span><button class="g" onclick="tAll=!tAll;render()">${tAll?'Nur Tage mit Eintrag':'Alle Tage zeigen'}</button></div></div>
  ${sh.length?sh.map(s=>{const n=S.notes[s]||{};return `<div class="c" style="cursor:pointer" onclick="day='${s}';go('heute')"><b>${dl(s)}</b>${occ(s)?' · '+esc(occ(s)):''}
  ${has(s)?`<div class="mu">Getrunken: ${esc(fl2(aItems(s)))}</div>`:''}
  <div style="margin-top:6px"><span class="mu">Gut:</span> ${n.g?esc(n.g):'–'}</div><div><span class="mu">Schlecht:</span> ${n.b?esc(n.b):'–'}</div>
@@ -205,7 +231,6 @@ function vExport(){
  <div class="r"><div><label>Monat</label><input type="month" value="${pm}" onchange="if(this.value){pm=this.value;render()}"></div><button class="p" onclick="mkPdf('m')">Monats-PDF</button></div>
  <div class="r" style="margin-top:10px"><div><label>Woche (beliebiger Tag darin)</label><input type="date" value="${pw}" onchange="if(this.value)pw=this.value"></div><button class="p" onclick="mkPdf('w')">Wochen-PDF</button></div>
  <div class="r" style="margin-top:10px"><div class="mu">Nur das Tagebuch (Anlass, Gut, Schlecht, Text) für den oben gewählten Monat</div><button class="p" onclick="mkDiaryPdf()">Tagebuch-PDF</button></div></div>
- ${vTb()}
  <div class="c"><h2>Backup (JSON)</h2>
  <div class="r"><button class="p" onclick="expJ()">Backup speichern</button><label class="g" style="margin:0"><input type="file" accept=".json,application/json" onchange="readF(this.files[0])" style="width:100%"></label></div>
  ${imp?`<div class="ban" style="background:var(--ac);color:var(--on)">Backup mit ${Object.keys(imp.entries).length} Tagen und ${Object.keys(imp.plans).length} Monatsplänen geladen.<br><div class="r" style="margin-top:6px"><button onclick="doImp(true)">Zusammenführen</button><button onclick="doImp(false)">Alles ersetzen</button><button onclick="imp=null;render()">Abbrechen</button></div></div>`:''}</div>`;
@@ -240,8 +265,7 @@ function mkPdf(k){
  d.setFontSize(10);
  [`Reiner Alkohol geplant: ${fg(tp)}   getrunken: ${fg(ta)}`,`Alkoholfreie Tage: ${dryN}   Tage über Plan: ${ov}`].forEach(t=>{d.text(t,L,y);y+=5});
  const ag=agg(isos);if(ag){const l=d.splitTextToSize('Getränke gesamt: '+ag,182);d.text(l,L,y);y+=l.length*4.6}
- if(k==='m')weeks(isos).forEach(([w,l])=>{const a=l.reduce((x,s)=>x+act(s),0),m=maxW(l[0]);d.text(`Woche ab ${dl(w)}: ${fg(a)}`+(m!=null?` (Limit ${maxTxt(l[0])})`:''),L,y);y+=5});
- else{const m=maxW(isos[0]);if(m!=null){d.text('Wochenlimit: '+maxTxt(isos[0]),L,y);y+=5}}
+ if(k==='m'){const m=maxM(pm);if(m!=null){d.text('Monatslimit: '+maxTxt(pm)+(ta>m?' - überschritten':''),L,y);y+=5}weeks(isos).forEach(([w,l])=>{d.text(`Woche ab ${dl(w)}: ${fg(l.reduce((x,s)=>x+act(s),0))}`,L,y);y+=5})}
  y+=4;hd();d.setFontSize(9);
  isos.forEach(s=>{
   const es=aItems(s),nn=S.notes[s]||{},pi=pItems(s);
